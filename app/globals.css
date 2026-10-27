@@ -17,3 +17,98 @@ body{min-height:100vh}button,input{font:inherit}button{cursor:pointer}a{color:in
 .journal-layout{display:flex;flex-direction:column;gap:17px}.journal-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.journal-panel .panel-heading{align-items:flex-start}.journal-date{display:flex;flex-direction:column;gap:7px;color:#9aa7ab;font-size:10px;font-weight:600;min-width:155px}.journal-date input,.journal-form input,.journal-form select,.journal-form textarea{width:100%;min-height:39px;padding:0 11px;background:var(--input);border:1px solid #2b353b;border-radius:7px;outline:none;color:#e5ebed;font:inherit;font-size:12px}.journal-form textarea{padding:11px;resize:vertical;line-height:1.6}.journal-date input:focus,.journal-form input:focus,.journal-form select:focus,.journal-form textarea:focus{border-color:#52866d;box-shadow:0 0 0 3px rgba(80,223,161,.07)}.journal-form{padding:20px 22px}.journal-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.journal-form label{display:flex;flex-direction:column;gap:8px;color:#b6c0c4;font-size:11px;font-weight:600}.journal-notes-field{grid-column:1/-1}.journal-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:17px;padding-top:15px;border-top:1px solid var(--border-soft)}.journal-trade-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.journal-button-group,.journal-row-actions{display:flex;align-items:center;gap:7px}.journal-row-actions .icon-button{width:29px;height:29px}.danger-icon{color:#ff969c}.journal-empty{text-align:center;padding:24px;color:var(--muted);font-size:11px}.journal-note-cell{max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.journal-total{display:flex;align-items:center;gap:13px;padding:14px 20px;border-top:1px solid var(--border-soft);font-size:11px}.journal-total>span{color:#aab6b9}.journal-total>strong{font-size:13px}.journal-total>small{margin-left:auto;max-width:400px;color:#77868c;font-size:9px;line-height:1.5}.journal-notice{justify-content:space-between}.journal-loading{padding:30px;color:var(--muted);font-size:12px}
 @media(max-width:1180px){.journal-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.journal-trade-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.journal-panel .panel-heading{flex-direction:column}.journal-date{width:100%}.journal-form{padding:15px}.journal-form-grid,.journal-trade-fields{grid-template-columns:1fr}.journal-notes-field{grid-column:auto}.journal-actions{align-items:flex-start;flex-direction:column}.journal-actions>.button,.journal-button-group{width:100%}.journal-button-group .button{flex:1}.journal-total{align-items:flex-start;flex-wrap:wrap;padding:13px 15px}.journal-total>small{flex-basis:100%;max-width:none;margin-left:0}}
+
+/* ===== Polish layer: alignment, form controls, motion ===== */
+body{background:radial-gradient(900px 480px at 80% -8%,rgba(80,223,161,.065),transparent 62%),radial-gradient(760px 460px at 4% 108%,rgba(90,150,225,.04),transparent 62%),var(--bg);background-attachment:fixed}
+.topbar{position:sticky;top:0;z-index:15;backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2)}
+.page-content{padding-bottom:28px}
+
+/* Form controls: one consistent look everywhere inside panels */
+.panel label{display:flex;flex-direction:column;gap:8px;color:#b6c0c4;font-size:11px;font-weight:600}
+.panel select,.panel textarea{width:100%;min-height:39px;padding:0 11px;background-color:var(--input);border:1px solid #2b353b;border-radius:7px;outline:none;color:#e5ebed;font:inherit;font-size:12px;transition:border-color .15s,box-shadow .15s,background-color .15s}
+.panel textarea{padding:11px;line-height:1.6;resize:vertical}
+.panel select{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:34px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2387939b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 12px center;background-size:12px}
+.panel select:hover,.panel textarea:hover,.journal-form input:hover{border-color:#3a474e}
+.panel select:focus,.panel textarea:focus{border-color:#52866d;box-shadow:0 0 0 3px rgba(80,223,161,.08)}
+.panel option{background:#12171b;color:#e5ebed}
+input[type=date],input[type=number]{color-scheme:dark}
+.panel .editor-fields input,.panel .editor-fields select{min-height:35px;font-size:11px}
+
+/* Challenges page */
+.challenge-select-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:end;gap:16px 20px;padding:22px 22px 0}
+.challenge-status-line{display:flex;align-items:flex-end;gap:14px;min-width:0}
+.challenge-status-line label{flex:1;min-width:0}
+.challenge-status-line .status-badge{min-height:39px;padding:0 13px;font-size:11px;border-radius:7px;text-transform:capitalize}
+.challenge-metrics{grid-template-columns:1fr 1fr 1.3fr 1fr;padding:20px 22px 0;margin-bottom:0}
+.challenge-metrics .challenge-period{font-size:20px;line-height:1.25;letter-spacing:-.03em}
+.challenge-metrics .metric-foot{margin-top:auto}
+.metric-card{display:flex;flex-direction:column}
+.band-meter{position:relative;height:6px;margin-top:12px;border-radius:99px;background:#1b2327;overflow:hidden}
+.band-meter span{position:absolute;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#2fb882,var(--green));box-shadow:0 0 12px rgba(80,223,161,.55)}
+.journal-actions.challenge-join{margin:20px 22px 0;padding:14px 16px;border:1px solid rgba(80,223,161,.2);border-radius:10px;background:linear-gradient(100deg,rgba(80,223,161,.09),rgba(80,223,161,.02))}
+.challenge-join .muted-cell{color:#9fb5aa;font-size:12px}
+.journal-panel>.notice{margin:20px 22px 0}
+.challenge-holidays{display:flex;align-items:flex-start;gap:16px;margin:20px 22px 0;padding:14px 16px;border:1px solid var(--border-soft);border-radius:10px;background:#10161a}
+.challenge-holidays>strong{flex:0 0 auto;padding-top:5px;font-size:11px;font-weight:600;color:#c5cfd2}
+.challenge-holidays ul{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.challenge-holidays li{display:inline-flex;align-items:center;gap:8px;padding:5px 11px 5px 6px;border:1px solid #27333a;border-radius:99px;background:#151d22;color:#aeb9be;font-size:11px;transition:border-color .15s,color .15s}
+.challenge-holidays li:hover{border-color:#3d5a50;color:#dce6e1}
+.challenge-holidays time{padding:2px 8px;border-radius:99px;background:var(--green-bg);color:var(--green);font-size:10px;font-weight:600;font-variant-numeric:tabular-nums}
+.challenge-table-heading{margin-top:24px;border-top:1px solid var(--border-soft)}
+.journal-panel>.empty-state{min-height:200px}
+
+/* Challenge management (admin) */
+.panel>.row{padding:20px 22px 0}
+.panel>.row label{min-width:0}
+.panel>.stats-editor{margin:0 22px}
+.panel>.notice{margin:18px 22px 0}
+.panel>.muted-cell{padding:22px}
+.panel>.table-wrap{border-top:1px solid var(--border-soft)}
+
+/* Tables */
+thead th{padding-top:14px;padding-bottom:14px;border-bottom:1px solid var(--border-soft)}
+tbody tr{transition:background .15s,box-shadow .15s}
+tbody tr:hover{background:rgba(80,223,161,.035);box-shadow:inset 3px 0 0 var(--green)}
+.rank-number{font-variant-numeric:tabular-nums}
+.rank-top{display:inline-grid;place-items:center;min-width:26px;height:22px;padding:0 6px;border-radius:6px;background:var(--green-bg);border:1px solid rgba(80,223,161,.18)}
+
+/* Cards, buttons, nav */
+.metric-card{position:relative;overflow:hidden;transition:border-color .2s,transform .2s,box-shadow .2s}
+.metric-card>*{position:relative}
+.metric-card:before{content:"";position:absolute;inset:0;background:radial-gradient(240px circle at var(--mx,50%) var(--my,0%),rgba(80,223,161,.12),transparent 70%);opacity:0;transition:opacity .25s;pointer-events:none}
+.metric-card:hover{border-color:#355248;transform:translateY(-2px);box-shadow:0 14px 34px rgba(0,0,0,.3)}
+.metric-card:hover:before{opacity:1}
+.metric-icon{transition:color .2s,border-color .2s,background .2s}
+.metric-card:hover .metric-icon{color:var(--green);border-color:#2f5446;background:#15231f}
+.panel{transition:border-color .2s}
+.panel:hover{border-color:#2d373e}
+.button-primary{box-shadow:0 6px 18px rgba(80,223,161,.14)}
+.button-primary:hover:not(:disabled){box-shadow:0 8px 24px rgba(80,223,161,.28)}
+.button-primary:active:not(:disabled){transform:translateY(0)}
+.nav-link{transition:background .16s,color .16s,transform .16s}
+.nav-link:hover{transform:translateX(2px)}
+.nav-link-active{box-shadow:inset 0 0 0 1px rgba(80,223,161,.12),0 0 24px rgba(80,223,161,.06)}
+.count-pill,.status-badge{font-variant-numeric:tabular-nums}
+
+@media (prefers-reduced-motion:no-preference){
+  /* One orchestrated moment: metric cards settle in, one after another */
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(80,223,161,.45)}70%{box-shadow:0 0 0 7px rgba(80,223,161,0)}100%{box-shadow:0 0 0 0 rgba(80,223,161,0)}}
+  .metric-card{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+  .metric-card:nth-child(2){animation-delay:.06s}.metric-card:nth-child(3){animation-delay:.12s}.metric-card:nth-child(4){animation-delay:.18s}
+  .live-dot{animation:pulse 2.4s ease-out infinite}
+  .band-meter span{animation:grow .9s .3s cubic-bezier(.2,.7,.2,1) both;transform-origin:left}
+  @keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+}
+@media (prefers-reduced-motion:reduce){.metric-card,.nav-link,.panel{transition:none}.metric-card:hover{transform:none}}
+
+@media(max-width:1180px){.challenge-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.challenge-holidays{flex-direction:column;gap:10px}.challenge-holidays>strong{padding-top:0}}
+@media(max-width:650px){
+  .challenge-select-grid{grid-template-columns:1fr;padding:18px 15px 0}
+  .challenge-status-line{flex-direction:column;align-items:stretch}
+  .challenge-metrics{padding:16px 15px 0}
+  .journal-actions.challenge-join,.challenge-holidays,.journal-panel>.notice,.panel>.notice,.panel>.stats-editor{margin-left:15px;margin-right:15px}
+  .panel>.row{padding:16px 15px 0;flex-wrap:wrap}
+  .journal-actions.challenge-join{align-items:stretch}
+}

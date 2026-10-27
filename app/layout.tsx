@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import PointerGlow from "@/components/pointer-glow";
 
 export const metadata: Metadata = {
   title: "Trading Arena | Performance, without the noise",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>{children}<PointerGlow /></body>
     </html>
   );
 }

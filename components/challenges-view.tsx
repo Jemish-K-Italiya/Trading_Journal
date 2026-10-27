@@ -28,6 +28,19 @@ const defaultEndDate = () => {
   return d.toLocaleDateString("en-CA");
 };
 
+const fmtDate = (iso: string, withYear = true) => {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-IN", { day: "numeric", month: "short", ...(withYear ? { year: "numeric" } : {}), timeZone: "UTC" });
+};
+const fmtRange = (a: string, b: string) => a.slice(0, 4) === b.slice(0, 4) ? `${fmtDate(a, false)} – ${fmtDate(b)}` : `${fmtDate(a)} – ${fmtDate(b)}`;
+const windowLabel = (start: string, end: string) => {
+  const today = dateToday();
+  const days = (from: string, to: string) => Math.round((Date.parse(to) - Date.parse(from)) / 864e5);
+  if (today < start) { const n = days(today, start); return `Starts in ${n} day${n === 1 ? "" : "s"}`; }
+  if (today > end) return "Ended";
+  const n = days(today, end); return n === 0 ? "Last day" : `${n} day${n === 1 ? "" : "s"} left`;
+};
+
 function makeStandings(members: Member[], rows: DailyResult[], defaultCapital = 0): Standing[] {
   const byUser = new Map<string, DailyResult[]>();
   rows.forEach((row) => byUser.set(row.user_id, [...(byUser.get(row.user_id) ?? []), row]));
@@ -198,13 +211,13 @@ export default function ChallengesView() {
         {selected && <>
           <div className="metric-grid journal-metrics challenge-metrics">
             <div className="metric-card"><div className="metric-top"><span>Initial capital</span><span className="metric-icon"><CirclePlus size={17}/></span></div><div className="metric-value">{money(Number(selected.initial_capital))}</div><div className="metric-foot"><span className="metric-neutral">Per trader</span></div></div>
-            <div className="metric-card"><div className="metric-top"><span>Daily target band</span><span className="metric-icon"><Trophy size={17}/></span></div><div className="metric-value">{Number(selected.daily_target_min_pct).toFixed(1)}–{Number(selected.daily_target_max_pct).toFixed(1)}%</div><div className="metric-foot"><span className="metric-neutral">Of opening balance</span></div></div>
-            <div className="metric-card"><div className="metric-top"><span>Challenge period</span><span className="metric-icon"><CalendarDays size={17}/></span></div><div className="metric-value challenge-period">{selected.starts_on} – {selected.ends_on}</div><div className="metric-foot"><span className="metric-neutral">Expiry: {weekdays.find((d) => d.value === Number(selected.expiry_day))?.label ?? "—"}</span></div></div>
+            <div className="metric-card"><div className="metric-top"><span>Daily target band</span><span className="metric-icon"><Trophy size={17}/></span></div><div className="metric-value">{Number(selected.daily_target_min_pct).toFixed(1)}–{Number(selected.daily_target_max_pct).toFixed(1)}%</div><div className="metric-foot"><span className="metric-neutral">Of opening balance</span></div>{(() => { const lo = Number(selected.daily_target_min_pct), hi = Number(selected.daily_target_max_pct), scale = Math.max(hi * 1.5, hi + 1); return <div className="band-meter" aria-hidden="true"><span style={{ left: `${lo / scale * 100}%`, width: `${Math.max((hi - lo) / scale * 100, 3)}%` }}/></div>; })()}</div>
+            <div className="metric-card"><div className="metric-top"><span>Challenge period</span><span className="metric-icon"><CalendarDays size={17}/></span></div><div className="metric-value challenge-period">{fmtRange(selected.starts_on, selected.ends_on)}</div><div className="metric-foot"><span className="metric-neutral">Expiry: {weekdays.find((d) => d.value === Number(selected.expiry_day))?.label ?? "—"}</span><span className="positive">{windowLabel(selected.starts_on, selected.ends_on)}</span></div></div>
             <div className="metric-card"><div className="metric-top"><span>Participants</span><span className="metric-icon"><Users size={17}/></span></div><div className="metric-value">{selectedMembers.length}</div><div className="metric-foot"><span className="metric-neutral">Registered traders</span></div></div>
           </div>
           {selected.status === "open" && !joined && <div className="journal-actions challenge-join"><span className="muted-cell">Your results use the source-of-truth mode selected in your journal.</span><button className="button button-primary" onClick={() => void joinChallenge()} disabled={saving}>Join challenge</button></div>}
           {joined && <div className="notice notice-success"><Check size={15} style={{ display: "inline", verticalAlign: "-3px", marginRight: 6 }}/>You are participating. <a href="/journal">Open your journal</a> to log performance for dates inside this challenge.</div>}
-          {selected.market_holidays?.length > 0 && <div className="challenge-holidays"><strong>Configured market holidays</strong><span>{selected.market_holidays.map((h) => `${h.date} ${h.name}`).join(" · ")}</span></div>}
+          {selected.market_holidays?.length > 0 && <div className="challenge-holidays"><strong>Market holidays</strong><ul>{selected.market_holidays.map((h) => <li key={`${h.date}-${h.name}`}><time dateTime={h.date}>{fmtDate(h.date, false)}</time>{h.name}</li>)}</ul></div>}
           <div className="panel-heading challenge-table-heading"><div><h2>Challenge standings</h2><p>Only logged days are included in day-based ratios. Daily notes and individual trade details remain private.</p></div></div>
           <div className="table-wrap"><table><thead><tr><th>RANK</th><th>TRADER</th><th>BALANCE</th><th>NET P&amp;L</th><th>RETURN</th><th>LOGGED DAYS</th><th>WIN RATE</th><th>BAND HIT</th><th>GREEN STREAK</th><th>MAX DD</th></tr></thead><tbody>{standings.length === 0 ? <tr><td colSpan={10}><div className="journal-empty">No participants yet. Join to be the first.</div></td></tr> : standings.map((standing, index) => <tr key={standing.user_id}><td><span className={`rank-number ${index < 3 ? "rank-top" : ""}`}>{String(index + 1).padStart(2, "0")}</span></td><td><strong>{standing.display_name}{standing.user_id === userId ? " (you)" : ""}</strong></td><td>{money(standing.balance)}</td><td className={standing.net >= 0 ? "positive" : "negative"}>{money(standing.net)}</td><td className={standing.return_pct >= 0 ? "positive" : "negative"}>{percent(standing.return_pct)}</td><td>{standing.days}</td><td>{standing.days ? `${standing.win_rate.toFixed(0)}%` : "—"}</td><td>{standing.days ? `${standing.band_hit_rate.toFixed(0)}%` : "—"}</td><td>{standing.streak}</td><td>{standing.days ? `${standing.max_drawdown.toFixed(2)}%` : "—"}</td></tr>)}</tbody></table></div>
         </>}
